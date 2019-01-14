@@ -1,0 +1,85 @@
+/* html, body, section {
+  height: 100%;
+} */
+
+body {
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 150%;
+  text-align: center;
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Pattern styles */
+.containerToDo {
+  display: flex;
+}
+
+.left-half {
+  background-color: #F9845B;
+  flex: 1;
+  padding: 1rem;
+}
+
+.middle-half {
+  background-color: #fff;
+  flex: 1;
+  padding: 1rem;
+  overflow: scroll;
+  display: block;
+  text-align: left;
+  color: #F9845B
+}
+
+.right-half {
+  background-color: rgb(221, 192, 182);
+  flex: 1;
+  padding: 1rem;
+  overflow: scroll;
+  display: block;
+  text-align: left;
+  color: #F9845B
+}
+
+.form-wrap {
+  height: 500px;
+  display: flex
+}
+
+.label {
+  width: 200px;
+  text-align: left
+}
+
+ul, li {
+  list-style: none;
+}
+
+.btn-status {
+  width: 25%;
+  align-self: center
+}
+
+.whole-card {
+  width: 75%;
+  margin: 10px auto;
+}
+
+.li-value {
+  display: inline;
+}
+
+.btn-danger {
+  width: 60%;
+}

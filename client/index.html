@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="google-signin-client_id" content="961345709718-mrplm3htc8gtai4a9btap35n35u3jnm2.apps.googleusercontent.com">
+        <title>To-Do List</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="./todo.css" >
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>        
+        
+        <section class="containerToDo">            
+            <div class="left-half">
+                <div class="showErr">
+                </div>
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                <div class="grid">    
+                    <form method="post" class="form login"  onsubmit="return false">           
+                        <div class="form__field">
+                            <label for="email"><span class="hidden">Email</span></label>
+                            <input type="email" name="email" id="email-regin" placeholder="email" class="form__input" required>
+                        </div>                
+                        <div class="form__field">
+                            <label for="login__password"><span class="hidden">Password</span></label>
+                            <input type="password" name="password" id="password-regis" class="form__input" placeholder="Password" required>
+                        </div>                
+                        <div class="form__field">
+                            <button id="buttonSubmit" onclick="regis($('#email-regis').val(), $('#password-regis').val())">REGISTER</button>
+                        </div>                    
+                    </form>        
+                    <form method="post" class="form login" onsubmit="return false">
+                        <br><br><br>
+                        <div class="form__field">
+                            <label for="email"><span class="hidden">Email</span></label>
+                            <input type="email" name="email" id="email" placeholder="email" class="form__input" required>
+                        </div>
+                        
+                        <div class="form__field">
+                            <label for="login__password"><span class="hidden">Password</span></label>
+                            <input type="password" name="password" id="password" class="form__input" placeholder="Password" required>
+                        </div>
+                        
+                        <div class="form__field">
+                            <button id="buttonSubmit" onclick="login($('#email').val(), $('#password').val())">LOGIN</button>
+                        </div>
+                            
+                    </form>
+                </div> 
+                <article>
+                    <br><br>
+                    <h1>INPUT FORM</h1>
+                    <div class="form-wrap">
+                        <form method="post" onsubmit="return false">
+                            <label class="label" for="title">Title:</label><input type="text" name="title" id="title"><br>
+                            <label class="label" for="description">Description:</label><input type="text" name="description" id="description"><br>
+                            <label class="label" for="datepicker">Date:</label><input type="text" name="datepicker" id="datepicker"><br>
+                            <button class="btn btn-secondary" id="buttonSubmit" onclick="post($('#title').val(), $('#description').val(), $('#datepicker').val())">SUBMIT</button>
+                        </form>
+                    </div>
+                    <div class="showErr">
+                    </div>
+                    <button class="btn btn-danger" id="buttonLogout" onclick="logout()">LOGOUT</button>
+                </article>
+            </div>
+            <div class="middle-half">
+                <h1 align="center">TO-DO LIST</h1>
+                <article>
+                    <ul id="ul-todo" >
+                    </ul>   
+                </article>
+            </div>
+            <div class="right-half">
+                <h1 align="center">Project LIST</h1>
+                <article>
+                    <ul id="ul-todo" >
+                    </ul>   
+                </article>
+            </div>
+        </section>
+        
+
+        <!-- bawaan bootstrap -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        
+        <!-- jquery general, buat ajax, etc -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- google -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+        <!-- date picker -->
+        <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+        <script>
+            function regis(param1, param2) {
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/register",
+                    data: {
+                        email: param1,
+                        password: param2
+                    }
+                })
+                    .done(function(response) {
+                        window.location.reload()
+                    })
+                    .fail(function(err) {
+                        $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                    })
+            }
+
+
+            function login(email, password) {
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:3000/users/login",
+                    data: {
+                        email: email,
+                        password: password
+                    }
+                })
+                    .done(function(result) {
+                        localStorage.setItem("token", result);
+                        window.location.reload()
+                    })
+                    .fail(function(err) {
+                        $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                    })
+            }
+        </script>
+
+        <script>
+            $( function () {
+                $( "#datepicker" ).datepicker({
+                    minDate: 0
+                });
+            });
+
+            readDataBase()
+
+            function datepickerModal() {
+                $( ".datepickerModal" ).datepicker({
+                    minDate: 0
+                });
+            }
+
+            function readDataBase() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost:3000/tasks",
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                })
+                .done(listTodo => {
+                    listTodo.forEach((item, index) => {
+                        let statusVar
+                        if(item.status === true) statusVar = "done"
+                        else statusVar = "undone"
+                        $('#ul-todo').append(`
+                        <div class="card whole-card" >
+                            <li>
+                                <div class="card-body" >
+                                <div class="li-value" style="background: #F9845B; width: 100%; height: 50px; color: #fff; padding: 10px; margin-bottom: 25px;">${item.date.slice(0,10)}</div>
+                                <div class="li-value"><label class="label" for="title">Title: </label> ${item.title}</div>
+                                <div class="li-value"><label class="label" for="title">Description: </label> ${item.description}</div>
+                                <div class="li-value"><label class="label" for="title">Status: </label> <button type="button" class="btn btn-status" id="status-${index}" onclick="editStatus('${item._id}', ${item.status})" > ${statusVar} </button> </div>
+                                <br>
+                                <form>
+                                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editTaskModal-${index}"> Edit </button>
+                                    <button type="button" class="btn btn-secondary" id="buttonDelete" onclick="deleteTask('${item._id}')">DELETE</button>
+                                </form>        
+                            </li>
+                        </div>
+
+                        <div class="modal fade" id="editTaskModal-${index}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">                        
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="title" class="col-form-label">Title:</label>
+                                                <input type="text" class="form-control" name="title" id="titleModal-${index}" value="${item.title}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description" class="col-form-label">Description:</label>
+                                                <input type="text" class="form-control" name="description" id="descriptionModal-${index}" value="${item.description}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="date" class="col-form-label">Date:</label>
+                                                <input type="text" class="form-control datepickerModal" id="date-${index}" name="date" value="${item.date.slice(0, 10)}">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
+                                        <button type="button" class="btn btn-primary" id="buttonSubmit" onclick="editTask('${item._id}', $('#titleModal-${index}').val(), $('#descriptionModal-${index}').val(), $('#date-${index}').val())" data-dismiss="modal">SUBMIT</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `)
+                    })
+                    datepickerModal()
+                })
+                .fail(function(err) {
+                    $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                })
+            }
+
+            function post(param1, param2, param3) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:3000/tasks",
+                    data: {
+                        title: param1,
+                        description: param2,
+                        date: param3
+                    },
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                })
+                    .done(result => {
+                        $('#ul-todo').empty()
+                        readDataBase()
+                    })
+                    .fail(function(err) {
+                        $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                    })
+            }
+
+            function editTask(param1, param2, param3, param4) {
+                $.ajax({
+                    type: "PUT",
+                    url: `http://localhost:3000/tasks/${param1}`,
+                    data: {
+                        title: param2,
+                        description: param3,
+                        date: param4
+                    },
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                })
+                .done(result => {
+                    $('#ul-todo').empty()
+                    readDataBase()
+                })
+                .fail(function(err) {
+                    $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                })
+            }
+
+            function editStatus(param1, param2) {
+                $.ajax({
+                    type: "patch",
+                    url: `http://localhost:3000/tasks/editStatus/${param1}`,
+                    data: {
+                        status: !param2
+                    },
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                })
+                .done(result => {
+                    $('#ul-todo').empty()
+                    readDataBase()
+                })
+                .fail(function(err) {
+                    $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                })
+            }
+
+            function deleteTask(param) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `http://localhost:3000/tasks/${param}`,
+                    headers: {
+                        token: localStorage.getItem("token")
+                    }
+                })
+                .done(result => {
+                    $('#ul-todo').empty()
+                    readDataBase()
+                })
+                .fail(function(err) {
+                    $('.showErr').html(`<p>${err.responseJSON.message}</p>`)
+                })
+            }
+
+            function logout() {
+                localStorage.clear();
+                window.location.reload()
+            }
+        </script>
+    </body>
+</html>
